@@ -1,8 +1,6 @@
-User
+# AI Workflow
 
-↓
-
-Gemini
+User Question
 
 ↓
 
@@ -10,23 +8,46 @@ LangGraph Agent
 
 ↓
 
-Chooses Tool
+Choose Tool
 
+↓
 
-availabel tools 
+Execute Tool
 
-search_firs()
+↓
 
-search_accused()
+Collect Results
 
-search_victims()
+↓
 
-search_police_station()
+Gemini
 
-similar_cases()
+↓
 
-crime_statistics()
+Final Response
 
-criminal_network()
+---
 
-case_summary()
+## Available Tools
+
+- search_firs()
+- search_accused()
+- search_victims()
+- search_station()
+- similar_cases()
+- crime_statistics()
+- criminal_network()
+- summarize_case()
+
+---
+
+## Models
+
+LLM
+- Gemini 3.1 Flash
+
+Embeddings
+- Gemini Embeddings
+
+Vector Database
+- pgVector

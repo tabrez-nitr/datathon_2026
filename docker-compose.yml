@@ -1,0 +1,40 @@
+
+# Defines all the indiviual containers that make up this app
+services:
+
+
+  server: # name given to backend container 
+    build : ./server 
+    #tells docker to look at this folder docker image --> and build an image from it 
+    ports :
+      - "8000:8000" #Maps port from to your machine --> from docker 
+
+    volumes : 
+      - ./server:/app #syncs your backend folder to this image so we don't need to build image again and again 
+    
+    depends_on:
+      - db # this forces this container to wait until the db container starts 
+    
+    env_file:
+      - .env # loads environment variables from local '.env'
+
+
+  #2nd container 
+  db: 
+
+    image: pgvector/pgvector:pg17
+    #downloads prebuilt PostgressSQL 17 image that includes the pgvector extension 
+
+    restart : always # automatically restart this container if it fails due to ant reason 
+
+    environment:
+      - POSTGRES_USER=postgres # set the master database username 
+      - POSTGRES_PASSWORD=[PASSWORD] # set the master database password 
+      - POSTGRES_DB=crime_db # set the master database name 
+
+    volumes: 
+      - postgres_data: # persist database files 
+
+    ports: 
+      - "5432:5432" # map port 5432 from Docker to your machine 
+       
