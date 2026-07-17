@@ -1,11 +1,17 @@
+version: "3.9" 
+# docker compose file format version 
 
-# Defines all the indiviual containers that make up this app
 services:
+# Defines all the indiviual containers that make up this app
 
 
-  server: # name given to backend container 
-    build : ./server 
-    #tells docker to look at this folder docker image --> and build an image from it 
+  server: # name given to backend image  
+    build :
+      context : ./server 
+      # build the docker file located at server directory 
+
+    container_name : crime_backend # image name instead of ranodom name  
+    
     ports :
       - "8000:8000" #Maps port from to your machine --> from docker 
 
@@ -13,8 +19,10 @@ services:
       - ./server:/app #syncs your backend folder to this image so we don't need to build image again and again 
     
     depends_on:
-      - db # this forces this container to wait until the db container starts 
-    
+       db: # this forces this container to wait until the db container starts 
+        condition: "service_healthy"  
+        #delays starting the backend until the the db service passits health check 
+
     env_file:
       - .env # loads environment variables from local '.env'
 
@@ -24,17 +32,32 @@ services:
 
     image: pgvector/pgvector:pg17
     #downloads prebuilt PostgressSQL 17 image that includes the pgvector extension 
+    container_name: crime_db
 
-    restart : always # automatically restart this container if it fails due to ant reason 
+    restart : always # automatically restart this container if it fails due to any reason 
 
     environment:
       - POSTGRES_USER=postgres # set the master database username 
-      - POSTGRES_PASSWORD=[PASSWORD] # set the master database password 
+      - POSTGRES_PASSWORD=1234 # set the master database password 
       - POSTGRES_DB=crime_db # set the master database name 
 
     volumes: 
-      - postgres_data: # persist database files 
+      - postgres_data:/var/lib/postgresql/data 
+      # Mounts a named volume to permanently save database data; otherwise, data deletes on restart
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U postgres"]
+      interval: 5s 
+      timeout: 5s  
+      retries : 5
+    #actively pings the database to check if it is ready to accept connections 
+
+      
 
     ports: 
       - "5432:5432" # map port 5432 from Docker to your machine 
+    
+ 
+volumes:
+ postgres_data:
        
+#It tells Docker to explicitly create the storage space on your host machine if it doesn't already exist.
