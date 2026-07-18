@@ -7,13 +7,13 @@ from sqlalchemy import DateTime , func
 
 #this can be inherited to create new tables 
 class Base(DeclarativeBase):
-    """base class for all the models
+    """base class for all ORM models
     
     """
     pass 
 
 
-# this calls could be inhertited to use created at and updateat 
+# this class could be inherited to use created_at and updated_at 
 class TimestampMixin:
 
     """
@@ -22,16 +22,18 @@ class TimestampMixin:
     """
 
     created_at : Mapped[datetime] = mapped_column(
-        DateTime(timezone = True),
-        server_default = func.now() #automatically updates the the time 
+       DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False, #automatically updates the time 
         # now is sql query that returns the current time 
     
     )
 
     updated_at : Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        onupdate = func.now(),
-        server_default = func.now(),
+       DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
         # it will update the time only when the value is updated 
         # on update is used to update the value when the value is updated 
     )
