@@ -17,6 +17,8 @@ services:
 
     volumes : 
       - ./server:/app #syncs your backend folder to this image so we don't need to build image again and again 
+      # ./server computer location configs:
+      # ./app docker folder location 
     
     depends_on:
        db: # this forces this container to wait until the db container starts 
