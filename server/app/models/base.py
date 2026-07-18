@@ -1,0 +1,39 @@
+from datetime import datetime 
+
+from sqlalchemy.orm import DeclarativeBase, Mapped , mapped_column
+from sqlalchemy import DateTime , func
+
+
+
+#this can be inherited to create new tables 
+class Base(DeclarativeBase):
+    """base class for all the models
+    
+    """
+    pass 
+
+
+# this calls could be inhertited to use created at and updateat 
+class TimestampMixin:
+
+    """
+    this class is used to update the time of the created_at and updated_at
+    when the value is updated 
+    """
+
+    created_at : Mapped[datetime] = mapped_column(
+        DateTime(timezone = True),
+        server_default = func.now() #automatically updates the the time 
+        # now is sql query that returns the current time 
+    
+    )
+
+    updated_at : Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        onupdate = func.now(),
+        server_default = func.now(),
+        # it will update the time only when the value is updated 
+        # on update is used to update the value when the value is updated 
+    )
+
+    
