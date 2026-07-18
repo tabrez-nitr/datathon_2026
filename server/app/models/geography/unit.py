@@ -23,7 +23,7 @@ class Unit(Base , TimestampMixin):
 
     parent_unit : Mapped[int | None] = mapped_column(
         ForeignKey("units.id")
-        ) # parent unit id for hirecahry self-reffernce 
+        ) # parent unit id for hierarchy self-reference 
     
     nationality_id : Mapped[int | None] = mapped_column(
         Integer,
@@ -35,7 +35,7 @@ class Unit(Base , TimestampMixin):
         ForeignKey("states.id")
     )
     
-    distric_id : Mapped[int] = mapped_column(
+    district_id : Mapped[int] = mapped_column(
         ForeignKey("districts.id")
     )
 
@@ -44,7 +44,7 @@ class Unit(Base , TimestampMixin):
         default=True
     )
 
-    state : Mapped["State"] = relaltionship(
+    state : Mapped["State"] = relationship(
         back_populates="units"
     )
 
@@ -56,7 +56,7 @@ class Unit(Base , TimestampMixin):
         back_populates="units"
     )
 
-    parent : Mapped["unit | None"] = relationship(
+    parent : Mapped["Unit | None"] = relationship(
         remote_side = [id],
         
     )
